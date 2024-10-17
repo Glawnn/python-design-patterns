@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - "master"
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Configure Git Identity
+        run: |
+          git config --global user.email "vodkas3630@gmail.com"
+          git config --global user.name "Vodkas"
+
+      - name: Catch version and commit id
+        run: |
+          echo "new_version=v$(poetry version -s)" >> $GITHUB_ENV
+          echo "commit_id=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Create tag # with vx.y.z format
+        run: |
+          git tag "${{ env.new_version }}-${{ env.commit_id }}"
+          git push origin "${{ env.new_version }}-${{ env.commit_id }}"
+
+      - name: Publish to PyPI
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry config pypi-token.pypi $PYPI_TOKEN
+          poetry publish --build
