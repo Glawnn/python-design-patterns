@@ -42,9 +42,7 @@ jobs:
           git push origin "${{ env.new_version }}-${{ env.commit_id }}"
 
       - name: Publish to PyPI
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          poetry config pypi-token.pypi $PYPI_TOKEN
+          poetry config pypi-token.pypi  "${{ secrets.PYPI_TOKEN }}"
           poetry publish --build
 
