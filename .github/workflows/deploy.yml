@@ -41,8 +41,7 @@ jobs:
           git tag "${{ env.new_version }}-${{ env.commit_id }}"
           git push origin "${{ env.new_version }}-${{ env.commit_id }}"
 
+      - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
       - name: Publish to PyPI
-        run: |
-          poetry config pypi-token.pypi  "${{ secrets.PYPI_TOKEN }}"
-          poetry publish --build
+        run: poetry publish --build
 
