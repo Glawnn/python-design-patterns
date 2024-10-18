@@ -36,12 +36,13 @@ jobs:
           echo "new_version=v$(poetry version -s)" >> $GITHUB_ENV
           echo "commit_id=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Create tag # with vx.y.z format
+      - name: Create tag
         run: |
           git tag "${{ env.new_version }}-${{ env.commit_id }}"
           git push origin "${{ env.new_version }}-${{ env.commit_id }}"
 
-      - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
       - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: poetry publish --build
 
