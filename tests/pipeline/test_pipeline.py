@@ -1,5 +1,6 @@
 import pytest
 from pdp.pipeline import Pipeline
+from pdp.pipeline.pipeline_error import PipelineError
 from pdp.pipeline.step import Step
 
 
@@ -96,3 +97,18 @@ class TestPipeline:
 
         result = pipeline.run(x=1, y=2, z=3)
         assert result == {"x": 1, "y": 2, "z": 3, "step1": 3, "step2": 1}
+
+    def test_run_error(self):
+        def test_func(x):
+            raise ValueError("Error")
+
+        pipeline = Pipeline()
+        steps = [
+            Step(name="test", func=test_func),
+        ]
+
+        for step in steps:
+            pipeline.add_step(step)
+
+        with pytest.raises(PipelineError):
+            pipeline.run(x=1)
