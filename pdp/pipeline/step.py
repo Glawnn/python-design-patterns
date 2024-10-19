@@ -22,9 +22,9 @@ class Step:
         """Call the function with the given arguments and keyword arguments
 
         :param args: positional arguments
-        :rtype args: Any
+        :type args: Any
         :param kwargs: keyword arguments
-        :rtype kwargs: Any
+        :type kwargs: Any
 
         :return: the result of the function
         :rtype: Any
