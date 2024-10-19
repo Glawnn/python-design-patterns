@@ -1,6 +1,9 @@
 """ Pipeline class for the pipeline module """
 
 from typing import Any, Dict, List, Union
+
+from pdp.pipeline.pipeline_error import PipelineError
+
 from .step import Step
 
 
@@ -56,6 +59,11 @@ class Pipeline:
             func_args = step.get_args()
             filtered_args = {k: v for k, v in self.data.items() if k in func_args}
 
-            self.data[step.name] = step(**filtered_args)
+            try:
+                result = step(**filtered_args)
+            except Exception as e:
+                raise PipelineError(step.name, e) from e
+
+            self.data[step.name] = result
 
         return self.data
