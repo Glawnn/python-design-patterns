@@ -37,12 +37,12 @@ jobs:
 
       - name: Run Linter (flake8)
         run: |
-          poetry run flake8 pdp && \
-          poetry run flake8 tests
+          poetry run flake8 --max-line-length=120 pdp && \
+          poetry run flake8 --max-line-length=120 tests
 
       - name: Run Linter (pylint)
         run: poetry run pylint pdp
 
       - name: Run Tests
-        run: poetry run pytest -v tests
+        run: poetry run test-cov
   
