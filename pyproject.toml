@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-design-patterns"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Python library for implementing design patterns"
 authors = ["Vodkas <vodkas3630@gmail.com>"]
 readme = "README_PYPI.md"
