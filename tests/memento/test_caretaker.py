@@ -103,10 +103,13 @@ class TestCaretaker:
             Memento({"a": 5, "b": 6}),
         ]
         caretaker._current_index = 2
-        caretaker.undo()
         originator.a = 3
         originator.b = 4
-        assert caretaker._current_index == 1
+        assert originator.a == 3
+        assert originator.b == 4
+        caretaker.undo()
+        assert originator.a == 5
+        assert originator.b == 6
 
     def test_undo_save(self, caretaker, originator):
         caretaker._history = [
