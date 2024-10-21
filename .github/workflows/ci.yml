@@ -33,7 +33,7 @@ jobs:
         run: poetry install
 
       - name: Run formatter
-        run: poetry run black pdp
+        run: poetry run black .
 
       - name: Run Linter (flake8)
         run: |
