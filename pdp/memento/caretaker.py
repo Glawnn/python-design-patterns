@@ -44,8 +44,7 @@ class Caretaker:
 
     def undo(self):
         """Undo the last operation."""
-        if self._current_index > 0:
-            self._current_index -= 1
+        if self._current_index >= 0:
             self._originator.restore_state(self._history[self._current_index])
 
     def save_to_file(self, filename: str):
