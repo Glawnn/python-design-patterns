@@ -111,6 +111,24 @@ class TestCaretaker:
         assert originator.a == 5
         assert originator.b == 6
 
+    def test_undo_no_states(self, caretaker):
+        caretaker.undo()
+        assert caretaker._current_index == -1
+
+    def test_undo_after_restore(self, caretaker, originator):
+        caretaker._history = [
+            Memento({"a": 1, "b": 2}),
+            Memento({"a": 3, "b": 4}),
+            Memento({"a": 5, "b": 6}),
+        ]
+        caretaker._current_index = 2
+        caretaker.restore(1)
+        assert originator.a == 3
+        assert originator.b == 4
+        caretaker.undo()
+        assert originator.a == 5
+        assert originator.b == 6
+
     def test_undo_save(self, caretaker, originator):
         caretaker._history = [
             Memento({"a": 1, "b": 2}),
