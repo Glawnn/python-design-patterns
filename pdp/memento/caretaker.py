@@ -43,8 +43,9 @@ class Caretaker:
             raise ValueError("Index out of range")
 
     def undo(self):
-        """Undo the last operation."""
+        """Undo the last operation. Restore the originator to the end of the history."""
         if self._current_index >= 0:
+            self._current_index = len(self._history) - 1
             self._originator.restore_state(self._history[self._current_index])
 
     def save_to_file(self, filename: str):
