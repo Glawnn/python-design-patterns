@@ -12,6 +12,8 @@
       - [Examples](#examples)
     - [Memento Pattern](#memento-pattern)
       - [Examples](#examples-1)
+    - [Mediator Pattern](#mediator-pattern)
+      - [Examples](#examples-2)
 
 ## Installation
 
@@ -23,10 +25,10 @@ pip install python-design-patterns
 ## Usage
 
 ### Pipeline Pattern
-The Pipeline pattern allows you to pass data through multiple processing steps. Each step can take inputs, perform operations, and pass results to the next step.
+The **Pipeline** pattern allows you to pass data through multiple processing steps. Each step can take inputs, perform operations, and pass results to the next step.
 
 #### Examples
-Here is a simple example of how to use the pipeline:
+Here is a simple example of how to use the **pipeline**:
 
 ```python
 from pdp.pipeline import Pipeline, Step
@@ -73,11 +75,11 @@ print(result)  # Output: {'x': 2, 'y': 3, 'z': 1, 'step1': 6, 'step2': 5}
 ```
 
 ### Memento Pattern
-The Memento pattern allows you to save and restore the state of an object without exposing its internal structure. It is useful for implementing features like undo/redo in applications.
+The **Memento** pattern allows you to save and restore the state of an object without exposing its internal structure. It is useful for implementing features like undo/redo in applications.
 
 #### Examples
-Here's a simple example of how to use the Memento pattern:
-To use this pattern, your class should inherit from the BaseOriginator class provided by the library.
+Here's a simple example of how to use the **Memento** pattern:
+To use this pattern, your class should inherit from the **BaseOriginator** class provided by the library.
 
 ```python
 from pdp.memento import BaseOriginator, Caretaker
@@ -137,4 +139,52 @@ print(car) # x=1, y=2, speed=26
 
 # save history to file
 caretaker.save_to_file("car_history.json")
+```
+
+### Mediator Pattern
+
+**Mediator** is a behavioral design pattern that lets you reduce chaotic dependencies between objects. The pattern restricts direct communications between the objects and forces them to collaborate only via a **mediator** object.
+
+#### Examples
+Here's a simple example of how to use the **Mediator** pattern:
+To use this pattern, your class should inherit from the **BaseComponent** class provided by the library.
+
+```python
+from pdp.mediator import Mediator, BaseComponent
+
+class Button(BaseComponent):
+    def __init__(self, name: str, mediator: Mediator):
+        super().__init__(name, mediator)
+
+    def click(self):
+        self.notify({"value": "toto"})
+    
+    def on_notify(self, sender: BaseComponent, event: dict, *args, **kwargs):
+        pass
+    
+
+class TextBox(BaseComponent):
+    def __init__(self, name: str, mediator: Mediator):
+        super().__init__(name, mediator)
+        self.text = "default"
+
+    def on_notify(self, sender: BaseComponent, event: dict, *args, **kwargs):
+        if sender.name == "Button":
+            self.text = event["value"]
+    
+    def show_text(self):
+        print(self.text)
+
+
+mediator = Mediator()
+
+button = Button("Button", mediator)
+textbox = TextBox("TextBox", mediator)
+
+mediator.add_components(button, textbox)
+
+textbox.show_text() # > "default"
+
+button.click()
+textbox.show_text() # > "toto"
 ```
